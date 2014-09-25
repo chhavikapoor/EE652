@@ -20,7 +20,17 @@ collect_view_arch_read_sensors(struct collect_view_data_msg *msg)
   msg->sensors[BATTERY_INDICATOR] = sht11_sensor.value(SHT11_SENSOR_BATTERY_INDICATOR);
   msg->sensors[LIGHT1_SENSOR] = light_sensor.value(LIGHT_SENSOR_PHOTOSYNTHETIC);
   msg->sensors[LIGHT2_SENSOR] = light_sensor.value(LIGHT_SENSOR_TOTAL_SOLAR);
-  msg->sensors[TEMP_SENSOR] = sht11_sensor.value(SHT11_SENSOR_TEMP);
+  //msg->sensors[TEMP_SENSOR] = sht11_sensor.value(SHT11_SENSOR_TEMP);
+
+  //EE652: Setting address of the mote in TEMP_SENSOR field
+  msg->sensors[TEMP_SENSOR] = 136; 
+
+  //EE652: Just for checking
+  //msg->sensors[TEMP_SENSOR] = -1000; 
+
+  //EE652: Getting RSSI value in the RSSI field.
+  msg->sensors[RSSI_SENSOR] = (cc2420_last_rssi - 45);
+  //msg->sensors[RSSI_SENSOR] = packetbuf_attr(PACKETBUF_ATTR_RSSI);
   msg->sensors[HUMIDITY_SENSOR] = sht11_sensor.value(SHT11_SENSOR_HUMIDITY);
 
 

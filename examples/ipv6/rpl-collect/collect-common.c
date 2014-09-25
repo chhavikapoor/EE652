@@ -49,8 +49,11 @@
 static unsigned long time_offset;
 static int send_active = 1;
 
+
+
+//EE652: changing period to 10 sec
 #ifndef PERIOD
-#define PERIOD 60
+#define PERIOD 10  
 #endif
 #define RANDWAIT (PERIOD)
 
@@ -109,6 +112,7 @@ PROCESS_THREAD(collect_common_process, ev, data)
   static struct etimer period_timer, wait_timer;
   PROCESS_BEGIN();
 
+  
   collect_common_net_init();
 
   /* Send a packet every 60-62 seconds. */

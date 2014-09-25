@@ -208,6 +208,9 @@ PROCESS_THREAD(udp_client_process, ev, data)
 {
   PROCESS_BEGIN();
 
+  //EE652: Setting tx power
+  cc2420_set_txpower(7);
+
   PROCESS_PAUSE();
 
   set_global_address();

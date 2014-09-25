@@ -807,6 +807,9 @@ rpl_get_instance(uint8_t instance_id)
   return NULL;
 }
 /*---------------------------------------------------------------------------*/
+
+//EE652: which OF you are using must map to the MRHOF. 
+
 rpl_of_t *
 rpl_find_of(rpl_ocp_t ocp)
 {

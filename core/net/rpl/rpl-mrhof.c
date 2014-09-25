@@ -85,7 +85,7 @@ rpl_of_t rpl_mrhof = {
 
 typedef uint16_t rpl_path_metric_t;
 
-static rpl_path_metric_t
+static rpl_path_metric_t   //EE652: Interesting!
 calculate_path_metric(rpl_parent_t *p)
 {
   if(p == NULL) {
@@ -109,6 +109,9 @@ reset(rpl_dag_t *sag)
   PRINTF("RPL: Reset MRHOF\n");
 }
 
+
+//EE652: Exponential weighted moving average for calculating the etx. 
+//EE652: Interesting! 
 static void
 neighbor_link_callback(rpl_parent_t *p, int status, int numtx)
 {

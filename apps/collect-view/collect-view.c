@@ -104,5 +104,6 @@ collect_view_construct_message(struct collect_view_data_msg *msg,
 
   memset(msg->sensors, 0, sizeof(msg->sensors));
   collect_view_arch_read_sensors(msg);
+  
 }
 /*---------------------------------------------------------------------------*/
