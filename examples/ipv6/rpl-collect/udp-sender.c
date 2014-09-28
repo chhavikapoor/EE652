@@ -33,6 +33,7 @@
 #include "net/uip-udp-packet.h"
 #include "net/rpl/rpl.h"
 #include "dev/serial-line.h"
+#include "cc2420.h"
 #if CONTIKI_TARGET_Z1
 #include "dev/uart0.h"
 #else
@@ -209,7 +210,7 @@ PROCESS_THREAD(udp_client_process, ev, data)
   PROCESS_BEGIN();
 
   //EE652: Setting tx power
-  cc2420_set_txpower(7);
+  cc2420_set_txpower(3);
 
   PROCESS_PAUSE();
 
