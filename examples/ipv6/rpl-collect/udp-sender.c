@@ -154,6 +154,9 @@ collect_common_send(void)
                                  parent_etx, rtmetric,
                                  num_neighbors, beacon_interval);
 
+  PRINTF("Sending packet\n");
+  printf("sending packet 3\n");
+
   uip_udp_packet_sendto(client_conn, &msg, sizeof(msg),
                         &server_ipaddr, UIP_HTONS(UDP_SERVER_PORT));
 }

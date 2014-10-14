@@ -688,8 +688,9 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
   }
   return best_dag;
 }
+static int count_select_parent = 0 ;
 /*---------------------------------------------------------------------------*/
-rpl_parent_t *
+/*rpl_parent_t *
 rpl_select_parent(rpl_dag_t *dag)
 {
   rpl_parent_t *p, *best;
@@ -699,7 +700,6 @@ rpl_select_parent(rpl_dag_t *dag)
   p = nbr_table_head(rpl_parents);
   while(p != NULL) {
     if(p->rank == INFINITE_RANK) {
-      /* ignore this neighbor */
     } else if(best == NULL) {
       best = p;
     } else {
@@ -711,7 +711,37 @@ rpl_select_parent(rpl_dag_t *dag)
   if(best != NULL) {
     rpl_set_preferred_parent(dag, best);
   }
+  count_select_parent++;
+  printf("%d: Best parent is-", count_select_parent);
+  uip_ipaddr_t *ipaddress = rpl_get_parent_ipaddr(best);
+  printf("%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x", ((uint8_t *)ipaddress)[0], ((uint8_t *)ipaddress)[1], ((uint8_t *)ipaddress)[2], ((uint8_t *)ipaddress)[3], ((uint8_t *)ipaddress)[4], ((uint8_t *)ipaddress)[5], ((uint8_t *)ipaddress)[6], ((uint8_t *)ipaddress)[7], ((uint8_t *)ipaddress)[8], ((uint8_t *)ipaddress)[9], ((uint8_t *)ipaddress)[10], ((uint8_t *)ipaddress)[11], ((uint8_t *)ipaddress)[12], ((uint8_t *)ipaddress)[13], ((uint8_t *)ipaddress)[14], ((uint8_t *)ipaddress)[15]);
+  printf("\n");
+  return best;
+}*/
+rpl_parent_t *p_assignment_2 = NULL;
+rpl_parent_t *
+rpl_select_parent(rpl_dag_t *dag)
+{  
+  rpl_parent_t *p, *best;
 
+  best = NULL;
+
+  if(p_assignment_2 == NULL){
+    p_assignment_2  = nbr_table_head(rpl_parents);
+  }
+  
+  best = p_assignment_2 ;
+
+  count_select_parent++;
+  printf("%d: Best parent is-", count_select_parent);
+  uip_ipaddr_t *ipaddress = rpl_get_parent_ipaddr(best);
+  printf("%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x", ((uint8_t *)ipaddress)[0], ((uint8_t *)ipaddress)[1], ((uint8_t *)ipaddress)[2], ((uint8_t *)ipaddress)[3], ((uint8_t *)ipaddress)[4], ((uint8_t *)ipaddress)[5], ((uint8_t *)ipaddress)[6], ((uint8_t *)ipaddress)[7], ((uint8_t *)ipaddress)[8], ((uint8_t *)ipaddress)[9], ((uint8_t *)ipaddress)[10], ((uint8_t *)ipaddress)[11], ((uint8_t *)ipaddress)[12], ((uint8_t *)ipaddress)[13], ((uint8_t *)ipaddress)[14], ((uint8_t *)ipaddress)[15]);
+  printf("\n");
+
+  if(best != NULL) {
+    rpl_set_preferred_parent(dag, best);
+    p_assignment_2  = nbr_table_next(rpl_parents, p_assignment_2);
+  }
   return best;
 }
 /*---------------------------------------------------------------------------*/

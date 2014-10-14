@@ -73,6 +73,7 @@ void
 uip_udp_packet_sendto(struct uip_udp_conn *c, const void *data, int len,
 		      const uip_ipaddr_t *toaddr, uint16_t toport)
 {
+  printf("We are inside uip_udp_packet\n");
   uip_ipaddr_t curaddr;
   uint16_t curport;
 
