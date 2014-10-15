@@ -77,7 +77,8 @@
 #include "net/uip-ds6.h"
 
 #include <string.h>
-
+int forward_pack = 0;
+int ip_pack = 0;
 #if UIP_CONF_IPV6
 /*---------------------------------------------------------------------------*/
 /* For Debug, logging, statistics                                            */
@@ -1071,6 +1072,7 @@ uip_process(uint8_t flag)
   
   /* This is where the input processing starts. */
   UIP_STAT(++uip_stat.ip.recv);
+  printf("Receiving IP:%d\n", ip_pack ++);
    
   /* Start of IP input header processing code. */
    
@@ -1185,6 +1187,8 @@ uip_process(uint8_t flag)
       PRINT6ADDR(&UIP_IP_BUF->destipaddr);
       PRINTF("\n");
       UIP_STAT(++uip_stat.ip.forwarded);
+      printf("IPV6 forwarding %d\n", forward_pack ++);
+      //printf("IP forward %d\n",uip_stat.ip.forwarded);
       goto send;
     } else {
       if((uip_is_addr_link_local(&UIP_IP_BUF->srcipaddr)) &&

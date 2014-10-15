@@ -103,7 +103,7 @@ rtimer_clock_t cc2420_time_of_arrival, cc2420_time_of_departure;
 
 int cc2420_authority_level_of_sender;
 
-int cc2420_packets_seen, cc2420_packets_read;
+int cc2420_packets_seen, cc2420_packets_read, cc2420_transmitted;
 
 static uint8_t volatile pending;
 
@@ -342,6 +342,7 @@ cc2420_init(void)
 static int
 cc2420_transmit(unsigned short payload_len)
 {
+  
   int i, txpower;
   uint8_t total_len;
 #if CC2420_CONF_CHECKSUM
@@ -475,11 +476,14 @@ cc2420_prepare(const void *payload, unsigned short payload_len)
   RELEASE_LOCK();
   return 0;
 }
+
+
 /*---------------------------------------------------------------------------*/
 static int
 cc2420_send(const void *payload, unsigned short payload_len)
-{
+{  
   cc2420_prepare(payload, payload_len);
+  
   return cc2420_transmit(payload_len);
 }
 /*---------------------------------------------------------------------------*/
@@ -680,6 +684,7 @@ cc2420_read(void *buf, unsigned short bufsize)
   GET_LOCK();
 
   cc2420_packets_read++;
+  printf("CC2420 received: %d\n",cc2420_packets_read);
 
   getrxbyte(&len);
 

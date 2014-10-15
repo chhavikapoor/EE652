@@ -86,7 +86,7 @@
 #endif /* UIP_CONF_IPV6 */
 
 #include <string.h>
-
+int ip_pack =0;
 /*---------------------------------------------------------------------------*/
 /* Variable definitions. */
 
@@ -824,6 +824,9 @@ uip_process(uint8_t flag)
 #endif
 
   /* This is where the input processing starts. */
+  
+  printf("IP Packets:%d\n", ip_pack++);
+
   UIP_STAT(++uip_stat.ip.recv);
 
   /* Start of IP input header processing code. */

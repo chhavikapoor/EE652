@@ -690,50 +690,74 @@ rpl_select_dag(rpl_instance_t *instance, rpl_parent_t *p)
 }
 static int count_select_parent = 0 ;
 /*---------------------------------------------------------------------------*/
+
+rpl_parent_t *p_assignment_2 = NULL, *best_1 = NULL;
 /*rpl_parent_t *
 rpl_select_parent(rpl_dag_t *dag)
 {
-  rpl_parent_t *p, *best;
+  rpl_parent_t *p;
 
-  best = NULL;
+  if(p_assignment_2 == best_1){
+    printf("best = next\n");
+  }else{
+    printf("best!=next\n");
+  }
 
-  p = nbr_table_head(rpl_parents);
-  while(p != NULL) {
-    if(p->rank == INFINITE_RANK) {
-    } else if(best == NULL) {
-      best = p;
+  if(p_assignment_2 == NULL){
+    printf("ass2 = 0\n");
+   p_assignment_2 = nbr_table_head(rpl_parents);
+  }
+
+  while(p_assignment_2 != NULL) {
+    if(p_assignment_2->rank == INFINITE_RANK) {
+    } else if(best_1 == NULL) {
+      printf("hi1\n");
+      best_1 = p_assignment_2;
+      p_assignment_2 = nbr_table_next(rpl_parents, p);
+      rpl_set_preferred_parent(dag, best_1);
+      break;
     } else {
-      best = dag->instance->of->best_parent(best, p);
+      //best_1 = dag->instance->of->best_parent(best_1, p_assignment_2);
+      p_assignment_2 = nbr_table_next(rpl_parents, p);
+      rpl_set_preferred_parent(dag, best_1);
+      printf("hi2\n");
+      
+      break;
     }
-    p = nbr_table_next(rpl_parents, p);
+    printf("we are here\n");
+    p_assignment_2 = nbr_table_next(rpl_parents, p);
   }
 
-  if(best != NULL) {
-    rpl_set_preferred_parent(dag, best);
-  }
   count_select_parent++;
   printf("%d: Best parent is-", count_select_parent);
-  uip_ipaddr_t *ipaddress = rpl_get_parent_ipaddr(best);
+  uip_ipaddr_t *ipaddress = rpl_get_parent_ipaddr(best_1);
   printf("%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x", ((uint8_t *)ipaddress)[0], ((uint8_t *)ipaddress)[1], ((uint8_t *)ipaddress)[2], ((uint8_t *)ipaddress)[3], ((uint8_t *)ipaddress)[4], ((uint8_t *)ipaddress)[5], ((uint8_t *)ipaddress)[6], ((uint8_t *)ipaddress)[7], ((uint8_t *)ipaddress)[8], ((uint8_t *)ipaddress)[9], ((uint8_t *)ipaddress)[10], ((uint8_t *)ipaddress)[11], ((uint8_t *)ipaddress)[12], ((uint8_t *)ipaddress)[13], ((uint8_t *)ipaddress)[14], ((uint8_t *)ipaddress)[15]);
   printf("\n");
-  return best;
+  return best_1;
 }*/
-rpl_parent_t *p_assignment_2 = NULL;
+
 rpl_parent_t *
 rpl_select_parent(rpl_dag_t *dag)
 {  
   rpl_parent_t *p, *best;
+  rpl_parent_t * last_parent = dag->preferred_parent;
 
   best = NULL;
+
+  
 
   if(p_assignment_2 == NULL){
     p_assignment_2  = nbr_table_head(rpl_parents);
   }
-  
-  best = p_assignment_2 ;
 
-  count_select_parent++;
-  printf("%d: Best parent is-", count_select_parent);
+  uip_ipaddr_t *ipaddress3 = rpl_get_parent_ipaddr(p_assignment_2);
+  printf("NEXT P:%02x%02x", ((uint8_t *)ipaddress3)[14], ((uint8_t *)ipaddress3)[15]);
+  printf("\n");
+  
+  //best = p_assignment_2 ;
+  best = dag->instance->of->best_parent(last_parent, p_assignment_2);
+  //count_select_parent++;
+  printf("Best parent is-\n");
   uip_ipaddr_t *ipaddress = rpl_get_parent_ipaddr(best);
   printf("%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x", ((uint8_t *)ipaddress)[0], ((uint8_t *)ipaddress)[1], ((uint8_t *)ipaddress)[2], ((uint8_t *)ipaddress)[3], ((uint8_t *)ipaddress)[4], ((uint8_t *)ipaddress)[5], ((uint8_t *)ipaddress)[6], ((uint8_t *)ipaddress)[7], ((uint8_t *)ipaddress)[8], ((uint8_t *)ipaddress)[9], ((uint8_t *)ipaddress)[10], ((uint8_t *)ipaddress)[11], ((uint8_t *)ipaddress)[12], ((uint8_t *)ipaddress)[13], ((uint8_t *)ipaddress)[14], ((uint8_t *)ipaddress)[15]);
   printf("\n");

@@ -93,8 +93,10 @@ calculate_path_metric(rpl_parent_t *p)
   }
 
 #if RPL_DAG_MC == RPL_DAG_MC_NONE
+  printf("NONE\n");
   return p->rank + (uint16_t)p->link_metric;
 #elif RPL_DAG_MC == RPL_DAG_MC_ETX
+  printf("MC_ETX\n");
   return p->mc.obj.etx + (uint16_t)p->link_metric;
 #elif RPL_DAG_MC == RPL_DAG_MC_ENERGY
   return p->mc.obj.energy.energy_est + (uint16_t)p->link_metric;
@@ -185,27 +187,40 @@ best_parent(rpl_parent_t *p1, rpl_parent_t *p2)
   rpl_path_metric_t p1_metric;
   rpl_path_metric_t p2_metric;
 
-  dag = p1->dag; /* Both parents are in the same DAG. */
+  uip_ipaddr_t *ipaddress = rpl_get_parent_ipaddr(p1);
+  printf("P1:%02x%02x", ((uint8_t *)ipaddress)[14], ((uint8_t *)ipaddress)[15]);
+  printf("\n");
+uip_ipaddr_t *ipaddress2 = rpl_get_parent_ipaddr(p2);
+  printf("P2: %02x%02x",  ((uint8_t *)ipaddress2)[14], ((uint8_t *)ipaddress2)[15]);
+  printf("\n");
 
+
+  if(p1 == p2){
+    printf("equal");
+  }else{
+    printf("not equa");
+  }
+  dag = p1->dag; /* Both parents are in the same DAG. */
+  
   min_diff = RPL_DAG_MC_ETX_DIVISOR /
              PARENT_SWITCH_THRESHOLD_DIV;
 
   p1_metric = calculate_path_metric(p1);
   p2_metric = calculate_path_metric(p2);
+  uint16_t max_etx = (13*p1_metric)/10;
+  printf("P1: %d P2: %d Max: %d", p1_metric,p2_metric, max_etx);
 
   /* Maintain stability of the preferred parent in case of similar ranks. */
   if(p1 == dag->preferred_parent || p2 == dag->preferred_parent) {
-    if(p1_metric < p2_metric + min_diff &&
-       p1_metric > p2_metric - min_diff) {
-      PRINTF("RPL: MRHOF hysteresis: %u <= %u <= %u\n",
-             p2_metric - min_diff,
-             p1_metric,
-             p2_metric + min_diff);
-      return dag->preferred_parent;
+    printf("Both preferred\n");
+    if(p2_metric >= p1_metric && p2_metric <=max_etx ) {
+      printf("after etx comp\n");
+      return p2;
     }
   }
-
+  printf("Both not preferred\n");
   return p1_metric < p2_metric ? p1 : p2;
+  //return p2;
 }
 
 #if RPL_DAG_MC == RPL_DAG_MC_NONE
