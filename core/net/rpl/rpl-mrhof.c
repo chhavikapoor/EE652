@@ -198,15 +198,19 @@ uip_ipaddr_t *ipaddress2 = rpl_get_parent_ipaddr(p2);
   if(p1 == p2){
     printf("equal");
   }else{
-    printf("not equa");
+    printf("not equal");
   }
   dag = p1->dag; /* Both parents are in the same DAG. */
   
   min_diff = RPL_DAG_MC_ETX_DIVISOR /
              PARENT_SWITCH_THRESHOLD_DIV;
 
-  p1_metric = calculate_path_metric(p1);
-  p2_metric = calculate_path_metric(p2);
+  //p1_metric = calculate_path_metric(p1);
+  //p2_metric = calculate_path_metric(p2);
+
+   p1_metric = p1->rank;
+   p2_metric = p2->rank;
+
   uint16_t max_etx = (13*p1_metric)/10;
   printf("P1: %d P2: %d Max: %d", p1_metric,p2_metric, max_etx);
 

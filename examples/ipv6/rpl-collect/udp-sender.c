@@ -52,6 +52,7 @@
 
 static struct uip_udp_conn *client_conn;
 static uip_ipaddr_t server_ipaddr;
+extern uint16_t my_node_id;
 
 /*---------------------------------------------------------------------------*/
 PROCESS(udp_client_process, "UDP client process");
@@ -155,10 +156,18 @@ collect_common_send(void)
                                  num_neighbors, beacon_interval);
 
   PRINTF("Sending packet\n");
-  printf("sending packet 3\n");
+  printf("Node ID: %d\n",my_node_id);
+
+  if(my_node_id == 17  ||
+     my_node_id == 16 ||
+     my_node_id == 15 || 
+     my_node_id == 14 || 
+     my_node_id == 13 || 
+     my_node_id == 12){
 
   uip_udp_packet_sendto(client_conn, &msg, sizeof(msg),
                         &server_ipaddr, UIP_HTONS(UDP_SERVER_PORT));
+}
 }
 /*---------------------------------------------------------------------------*/
 void

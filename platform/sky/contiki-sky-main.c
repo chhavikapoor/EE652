@@ -55,6 +55,8 @@
 #include "sys/autostart.h"
 #include "sys/profile.h"
 
+ uint16_t my_node_id=0;
+
 #if UIP_CONF_ROUTER
 
 #ifndef UIP_ROUTER_MODULE
@@ -276,7 +278,8 @@ main(int argc, char **argv)
 
   printf(CONTIKI_VERSION_STRING " started. ");
   if(node_id > 0) {
-    printf("Node id is set to %u.\n", node_id);
+    printf("Node's id is set to %u.\n", node_id);
+    my_node_id = node_id;
   } else {
     printf("Node id is not set.\n");
   }
