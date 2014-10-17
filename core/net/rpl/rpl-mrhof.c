@@ -49,13 +49,14 @@
 
 #define DEBUG DEBUG_NONE
 #include "net/uip-debug.h"
-
+#define MAX_FORWARD_COUNT 2
 static void reset(rpl_dag_t *);
 static void neighbor_link_callback(rpl_parent_t *, int, int);
 static rpl_parent_t *best_parent(rpl_parent_t *, rpl_parent_t *);
 static rpl_dag_t *best_dag(rpl_dag_t *, rpl_dag_t *);
 static rpl_rank_t calculate_rank(rpl_parent_t *, rpl_rank_t);
 static void update_metric_container(rpl_instance_t *);
+extern int reset_counter;
 
 rpl_of_t rpl_mrhof = {
   reset,
@@ -182,6 +183,10 @@ best_dag(rpl_dag_t *d1, rpl_dag_t *d2)
 static rpl_parent_t *
 best_parent(rpl_parent_t *p1, rpl_parent_t *p2)
 {
+
+  if(reset_counter >= MAX_FORWARD_COUNT){
+    printf("Switch parent. Forward count is %d\n",reset_counter);
+    reset_counter = 0;
   rpl_dag_t *dag;
   rpl_path_metric_t min_diff;
   rpl_path_metric_t p1_metric;
@@ -224,6 +229,11 @@ uip_ipaddr_t *ipaddress2 = rpl_get_parent_ipaddr(p2);
   }
   printf("Both not preferred\n");
   return p1_metric < p2_metric ? p1 : p2;
+}
+
+else{
+  return p1;
+}
   //return p2;
 }
 

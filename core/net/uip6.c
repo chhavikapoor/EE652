@@ -77,6 +77,9 @@
 #include "net/uip-ds6.h"
 
 #include <string.h>
+
+
+int reset_counter = 0;
 int forward_pack = 0;
 int ip_pack = 0;
 #if UIP_CONF_IPV6
@@ -1188,6 +1191,9 @@ uip_process(uint8_t flag)
       PRINTF("\n");
       UIP_STAT(++uip_stat.ip.forwarded);
       printf("IPV6 forwarding %d\n", forward_pack ++);
+      //we are trying to optimize the parent switching based on the number of packets forwarded. 
+      reset_counter ++;
+     
       //printf("IP forward %d\n",uip_stat.ip.forwarded);
       goto send;
     } else {
